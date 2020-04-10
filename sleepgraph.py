@@ -38,7 +38,7 @@ class SleepPhase:
         return (self.endtime - self.starttime).total_seconds()
     
     def in_range(self, point):
-        return point.time() > self.starttime.time() and point.time() < self.endtime.time()
+        return point.time() >= self.starttime.time() and point.time() <= self.endtime.time()
 
 class WorkbookReader:
     def __init__(self, filename):
