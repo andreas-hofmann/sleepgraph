@@ -6,3 +6,7 @@ Imagine you're having a baby, which sleeps unregularly and want to establish som
 It takes sleep data in an excel-sheet (Col1: Day, Col2: Sleep start, Col3: Sleep end), and generates a histogram from the data points.
 
 This was quickly hacked together, works well enough for now, but don't expect miracles.
+
+Required modules:
+- matplotlib
+- openpyxl
