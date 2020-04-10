@@ -24,7 +24,7 @@ class SleepPhase:
         end = datetime.fromisoformat(d + " " + str(endtime))
 
         if start > end:
-            start -= timedelta(days=1)
+            end += timedelta(days=1)
 
         self.date = date
         self.starttime = start
