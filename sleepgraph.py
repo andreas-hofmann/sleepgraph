@@ -84,6 +84,27 @@ def plot_histogram(data, raster, resolution):
 
     plt.show()
 
+def calculate_average(totals):
+    total_sleep = 0
+    total_days = 0
+
+    for d in totals.items():
+        total_days += 1
+        total_sleep +=  d[1]
+
+    return total_sleep/total_days
+
+def calculate_totals(data):
+    totals = {}
+
+    for d in data:
+        if not totals.get(d.date):
+            totals[d.date] = 0
+
+        totals[d.date] += d.duration()
+
+    return totals
+
 def main():
     parser = OptionParser(usage=USAGE)
 
@@ -112,6 +133,13 @@ def main():
     reader = WorkbookReader(infile)
 
     data = reader.read_data()
+    totals = calculate_totals(data)
+    average = calculate_average(totals)
+
+    for a in totals.items():
+        print(str(a[0].date()) + " : %.01fh" % (a[1]/60./60.))
+
+    print("Average sleep time: %.1fh" % (average/60./60.))
 
     if options.histogram:
         plot_histogram(data, raster, resolution)
