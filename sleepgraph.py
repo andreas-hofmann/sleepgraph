@@ -153,9 +153,9 @@ def main():
     average = calculate_average(totals)
 
     for a in totals.items():
-        print(str(a[0].date()) + f" : Day: {a[1]['day']/3600.0:02.01f}h,"
-                               + f" Night: {a[1]['night']/3600.0:02.01f}h,"
-                               + f" Total: {a[1]['sum']/3600.0:02.01f}h")
+        print(str(a[0].date()) + f" : Day: {a[1]['day']/3600.0:04.01f}h,"
+                               + f" Night: {a[1]['night']/3600.0:04.01f}h,"
+                               + f" Total: {a[1]['sum']/3600.0:04.01f}h")
 
     print(f"Average sleep time: {average/3600:02.1f}h")
 
