@@ -56,31 +56,11 @@ class WorkbookReader:
         
         return phases
 
-def main():
-    parser = OptionParser(usage=USAGE)
-
-    parser.add_option("-i", "--infile", dest="infile",
-                      help="Input file to read from.")
-
-    options, args = parser.parse_args()
-
-    if not options.infile:
-        print("input filename missing.")
-        exit(-1)
-
-    infile = options.infile
-
-    if not infile.endswith(".xlsx"):
-      infile += ".xlsx"
-
-    reader = WorkbookReader(infile)
-
-    data = reader.read_data()
-    
+def plot_histogram(data, raster, resolution):
     hist_start = datetime(2000, 1, 1)
     hist_end = hist_start + timedelta(days=1)
     my_time = hist_start
-    my_delta = timedelta(seconds=5*60) # 5 minute raster
+    my_delta = timedelta(seconds=raster*60)
 
     hist_data = []
 
@@ -93,7 +73,7 @@ def main():
     
     fig, ax = plt.subplots(1,1)
 
-    ax.hist(hist_data, bins=24, color='lightblue')
+    ax.hist(hist_data, bins=int(24*(60/resolution)), color='lightblue')
 
     locator = mdates.HourLocator()
     formatter = mdates.AutoDateFormatter(locator)
@@ -103,6 +83,38 @@ def main():
     ax.xaxis.set_major_formatter(formatter)
 
     plt.show()
+
+def main():
+    parser = OptionParser(usage=USAGE)
+
+    parser.add_option("-i", "--infile", dest="infile",
+                      help="Input file to read from.")
+    parser.add_option("-H", "--histogram", dest="histogram", default=False, action="store_true", 
+                      help="Plot sleep histogram.")
+    parser.add_option("-R", "--raster", dest="raster", default=5,
+                      help="Raster in minutes. Default=5")
+    parser.add_option("-r", "--resolution", dest="resolution", default=60,
+                      help="Resolution in minutes. Default=5")
+
+    options, args = parser.parse_args()
+
+    if not options.infile:
+        print("input filename missing.")
+        exit(-1)
+
+    infile = options.infile
+    resolution = int(options.resolution)
+    raster = int(options.raster)
+
+    if not infile.endswith(".xlsx"):
+      infile += ".xlsx"
+
+    reader = WorkbookReader(infile)
+
+    data = reader.read_data()
+
+    if options.histogram:
+        plot_histogram(data, raster, resolution)
 
 if __name__ == "__main__":
     main()
