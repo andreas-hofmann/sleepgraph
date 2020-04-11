@@ -50,8 +50,14 @@ class WorkbookReader:
 
         for cell in self._workbook.active:
             date, start, end = cell[0].value, cell[1].value, cell[2].value
+
             if date:
                 last_date = date
+
+            if not start or not end:
+                print(f"Invalid data: {cell}. ignoring line.")
+                continue
+
             phases.append(SleepPhase(last_date, start, end))
         
         return phases
