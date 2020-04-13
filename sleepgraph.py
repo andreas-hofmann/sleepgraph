@@ -100,7 +100,7 @@ def calculate_average(totals):
 
     return total_sleep/total_days
 
-def calculate_totals(data):
+def calculate_totals(data, start_day, start_night):
     totals = {}
 
     for d in data:
@@ -110,20 +110,9 @@ def calculate_totals(data):
         totals[d.date]['sum'] += d.duration()
 
         key = 'night'
-        if  d.starttime.time() >= time(hour=8) and d.starttime.time() <= time(hour=19):
+        if  d.starttime.time() >= time(hour=start_day) and d.starttime.time() <= time(hour=start_night):
             key = 'day'
         totals[d.date][key] += d.duration()
-
-    return totals
-
-def calculate_day_night(data):
-    totals = {}
-
-    for d in data:
-        if not totals.get(d.date):
-            totals[d.date] = {'day': 0, 'night': 0}
-
-        totals[d.date] += d.duration()
 
     return totals
 
@@ -138,6 +127,10 @@ def main():
                       help="Raster in minutes. Default=5")
     parser.add_option("-r", "--resolution", dest="resolution", default=60,
                       help="Resolution in minutes. Default=5")
+    parser.add_option("-d", "--start-day", dest="start_day", default=8, type="int",
+                      help="start of a day. Default=8")
+    parser.add_option("-n", "--start-night", dest="start_night", default=19, type="int",
+                      help="start of a night. Default=19h")
 
     options, args = parser.parse_args()
 
@@ -155,7 +148,7 @@ def main():
     reader = WorkbookReader(infile)
 
     data = reader.read_data()
-    totals = calculate_totals(data)
+    totals = calculate_totals(data, options.start_day, options.start_night)
     average = calculate_average(totals)
 
     for a in totals.items():
