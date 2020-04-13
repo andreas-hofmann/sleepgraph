@@ -123,10 +123,10 @@ def main():
                       help="Input file to read from.")
     parser.add_option("-H", "--histogram", dest="histogram", default=False, action="store_true", 
                       help="Plot sleep histogram.")
-    parser.add_option("-R", "--raster", dest="raster", default=5,
+    parser.add_option("-R", "--raster", dest="raster", default=5, type="int",
                       help="Raster in minutes. Default=5")
-    parser.add_option("-r", "--resolution", dest="resolution", default=60,
-                      help="Resolution in minutes. Default=5")
+    parser.add_option("-r", "--resolution", dest="resolution", default=60, type="int",
+                      help="Resolution in minutes. Default=60")
     parser.add_option("-d", "--start-day", dest="start_day", default=8, type="int",
                       help="start of a day. Default=8")
     parser.add_option("-n", "--start-night", dest="start_night", default=19, type="int",
