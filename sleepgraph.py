@@ -91,14 +91,20 @@ def plot_histogram(data, raster, resolution):
     plt.show()
 
 def calculate_average(totals):
-    total_sleep = 0
+    total_sleep = { "sum": 0, "day" : 0, "night" : 0 }
     total_days = 0
 
     for d in totals.items():
         total_days += 1
-        total_sleep +=  d[1]['sum']
+        for key in [ "sum", "day", "night" ]:
+            total_sleep[key] +=  d[1][key]
 
-    return total_sleep/total_days
+    result = { };
+
+    for key in [ "sum", "day", "night" ]:
+        result[key] = total_sleep[key]/total_days
+
+    return result
 
 def calculate_totals(data, start_day, start_night):
     totals = {}
@@ -156,7 +162,9 @@ def main():
                                + f" Night: {a[1]['night']/3600.0:04.01f}h,"
                                + f" Total: {a[1]['sum']/3600.0:04.01f}h")
 
-    print(f"Average sleep time: {average/3600:02.1f}h")
+    print(f"Average sleep time (total): {average['sum']/3600:02.1f}h")
+    print(f"Average sleep time (day):   {average['day']/3600:02.1f}h")
+    print(f"Average sleep time:(night): {average['night']/3600:02.1f}h")
 
     if options.histogram:
         plot_histogram(data, raster, resolution)
