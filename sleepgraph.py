@@ -137,6 +137,8 @@ def main():
                       help="start of a day. Default=8")
     parser.add_option("-n", "--start-night", dest="start_night", default=19, type="int",
                       help="start of a night. Default=19h")
+    parser.add_option("-t", "--include-today", dest="include_today", default=False, action="store_true",
+                      help="Include today's data. Default=False")
 
     options, args = parser.parse_args()
 
@@ -154,6 +156,10 @@ def main():
     reader = WorkbookReader(infile)
 
     data = reader.read_data()
+
+    if not options.include_today:
+        data = [ d for d in data if d.date.date() != datetime.now().date()]
+
     totals = calculate_totals(data, options.start_day, options.start_night)
     average = calculate_average(totals)
 
